@@ -62,11 +62,28 @@ int main(int argc, char *argv[])
 int main()
 {
 	Mat img = imread("./src/test.jpg");
+	img.convertTo(img, CV_32FC3);
+	img = img / 255;
 	if(img.empty())
 	{
 		cout<<"error";
 		return -1;
 	}
+
+	vector<Mat> mv;
+	split(img, mv);
+//	namedWindow("R", 1);
+//	namedWindow("G", 1);
+//	namedWindow("B", 1);
+//
+//	imshow("R",mv[0]);
+//	imshow("G",mv[1]);
+//	imshow("B",mv[2]);
+
+
+	//Mat E = img(Range(1,128),Range(1,128)).clone();
+	//E = 1;
+	//imshow("mypic",E);
 
 	float *ptrimg = (float*)img.data; // image pointer
 
@@ -81,7 +98,7 @@ int main()
 
 	// convert the c array to Torch7 specific structure representing a tensor
 	THFloatStorage *storage = THFloatStorage_newWithData(ptrimg, img.rows * img.cols * img.channels());
-	THFloatTensor *tensor = THFloatTensor_newWithStorage3d(storage, 0, img.rows, img.cols,       //long size0_, long stride0_,
+	THFloatTensor *tensor = THFloatTensor_newWithStorage3d(storage, 0, img.rows, img.cols*img.channels(),       //long size0_, long stride0_,
 														   	   	   	   img.cols, img.channels(),
 																	   img.channels(), 1);
 	luaT_newmetatable(L, "torch.FloatTensor", NULL, NULL, NULL, NULL);
