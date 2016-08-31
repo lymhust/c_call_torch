@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
 int main()
 {
 	Mat img = imread("./src/test.jpg");
+
 	img.convertTo(img, CV_32FC3);
 	img = img / 255;
 	if(img.empty())
